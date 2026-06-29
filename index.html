@@ -3,207 +3,316 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- EDIT: page title shown in the browser tab and search results -->
   <title>Benjamin Ring</title>
-  <!-- EDIT: one-line description used by search engines and link previews -->
   <meta name="description" content="The personal website of Benjamin Ring." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 
   <style>
-    :root {
-      --bg: #FAF9F7;
-      --text: #191A1D;
-      --muted: #6B6C70;
-      --accent: #B8873F;
-      --accent-soft: rgba(184, 135, 63, 0.14);
-      --line: rgba(25, 26, 29, 0.10);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #141519;
-        --text: #ECEDEF;
-        --muted: #9A9CA2;
-        --accent: #D2A056;
-        --accent-soft: rgba(210, 160, 86, 0.16);
-        --line: rgba(236, 237, 239, 0.12);
-      }
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { -webkit-text-size-adjust: 100%; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
 
     body {
+      background: #0c1a0e;
+      color: #fff;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Background ── */
+
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .bg-photo {
+      position: absolute;
+      inset: -8%;
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.72) saturate(1.15);
+      will-change: transform;
+      transition: opacity 3s ease-in-out;
+    }
+
+    /* Organic color light blobs — sit between photo and vignette */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      filter: blur(100px);
+    }
+
+    .blob-green {
+      width: 750px; height: 750px;
+      background: radial-gradient(circle, rgba(52, 211, 130, 0.38) 0%, transparent 68%);
+      top: -18%; left: -12%;
+      animation: drift-a 24s ease-in-out infinite alternate;
+    }
+
+    .blob-blue {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(56, 182, 255, 0.32) 0%, transparent 68%);
+      bottom: -12%; right: -10%;
+      animation: drift-b 30s ease-in-out infinite alternate;
+    }
+
+    .blob-gold {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(255, 196, 80, 0.26) 0%, transparent 68%);
+      top: 42%; right: 18%;
+      animation: drift-c 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift-a {
+      0%   { transform: translate(  0px,   0px) scale(1.00); }
+      40%  { transform: translate( 50px,  70px) scale(1.12); }
+      100% { transform: translate( 80px, -45px) scale(0.92); }
+    }
+    @keyframes drift-b {
+      0%   { transform: translate(  0px,   0px) scale(1.00); }
+      50%  { transform: translate(-60px, -35px) scale(1.18); }
+      100% { transform: translate( 40px,  55px) scale(0.90); }
+    }
+    @keyframes drift-c {
+      0%   { transform: translate(  0px,  0px) scale(1.00); }
+      45%  { transform: translate( 35px,-50px) scale(1.10); }
+      100% { transform: translate(-45px, 25px) scale(0.94); }
+    }
+
+    /* Soft darkening vignette over blobs + photo */
+    .bg-vignette {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 85% 85% at 50% 50%, transparent 25%, rgba(8,14,10,0.70) 100%),
+        linear-gradient(to bottom, rgba(8,14,10,0.12) 0%, rgba(8,14,10,0.48) 100%);
+    }
+
+    /* Very subtle grain — adds photographic warmth */
+    .bg-grain {
+      position: absolute;
+      inset: -2%;
+      opacity: 0.038;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+      animation: grain 0.4s steps(2) infinite;
+    }
+
+    @keyframes grain {
+      0%   { transform: translate(  0px,  0px); }
+      25%  { transform: translate( -3px, -4px); }
+      50%  { transform: translate(  4px,  2px); }
+      75%  { transform: translate( -2px,  4px); }
+      100% { transform: translate(  3px, -3px); }
+    }
+
+    /* ── Stage ── */
+
+    .stage {
+      position: relative;
+      z-index: 10;
       min-height: 100vh;
       min-height: 100dvh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 2rem 1.5rem;
-      background: var(--bg);
-      color: var(--text);
-      font-family: "Inter", system-ui, -apple-system, sans-serif;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
     }
 
-    .stage {
+    /* ── Glass card ── */
+
+    .card {
       position: relative;
+      padding: 3.75rem 4rem;
+      max-width: 580px;
       width: 100%;
-      max-width: 600px;
+      background: rgba(6, 12, 8, 0.28);
+      backdrop-filter: blur(48px) saturate(1.5) brightness(1.08);
+      -webkit-backdrop-filter: blur(48px) saturate(1.5) brightness(1.08);
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.45),
+        inset 0  1px 0 rgba(255, 255, 255, 0.10),
+        inset 0 -1px 0 rgba(0,   0,   0, 0.20);
+
+      opacity: 0;
+      transform: translateY(22px);
+      animation: emerge 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
     }
 
-    /* Signature: a thin ring that nods to the name "Ring" */
-    .ring {
-      position: absolute;
-      top: -120px;
-      right: -60px;
-      width: 320px;
-      height: 320px;
-      color: var(--accent);
-      opacity: 0.5;
-      pointer-events: none;
-      animation: spin 64s linear infinite;
-      z-index: 0;
+    @keyframes emerge {
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .ring circle { fill: none; stroke: currentColor; }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .content { position: relative; z-index: 1; }
+    /* ── Eyebrow ── */
 
     .eyebrow {
-      font-size: 0.8rem;
-      font-weight: 500;
-      letter-spacing: 0.18em;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.25rem;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 1.1rem;
+      opacity: 0;
+      animation: fade-up 0.9s ease 0.65s forwards;
     }
+
+    /* ── Name ── */
 
     .name {
-      font-family: "Space Grotesk", system-ui, sans-serif;
-      font-weight: 700;
-      font-size: clamp(2.75rem, 9vw, 4.75rem);
-      line-height: 1.02;
-      letter-spacing: -0.02em;
-      margin-bottom: 1.5rem;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300;
+      font-size: clamp(3.6rem, 9vw, 6.2rem);
+      line-height: 0.9;
+      letter-spacing: -0.01em;
+      color: #fff;
+      text-shadow: 0 2px 48px rgba(0, 0, 0, 0.35);
+      margin-bottom: 2.75rem;
+      opacity: 0;
+      animation: fade-up 1s ease 0.85s forwards;
     }
 
-    .intro {
-      font-size: clamp(1.05rem, 2.5vw, 1.2rem);
-      color: var(--muted);
-      max-width: 42ch;
-      margin-bottom: 2.5rem;
-    }
+    /* ── Links ── */
 
     .links {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem 1.75rem;
-      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fade-up 0.9s ease 1.05s forwards;
     }
 
     .links a {
-      position: relative;
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: var(--text);
+      display: inline-block;
+      padding: 0.55rem 1.45rem;
+      font-size: 0.78rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: rgba(255, 255, 255, 0.72);
       text-decoration: none;
-      padding: 0.2rem 0;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      transition:
+        background  0.4s ease,
+        border-color 0.4s ease,
+        color        0.4s ease,
+        transform    0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
-    .links a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-      width: 100%;
-      height: 1.5px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.28s ease;
+    .links a:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.28);
+      color: #fff;
+      transform: translateY(-3px);
     }
-
-    .links a:hover::after,
-    .links a:focus-visible::after { transform: scaleX(1); }
 
     .links a:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 4px;
-      border-radius: 2px;
+      outline: 2px solid rgba(255, 255, 255, 0.5);
+      outline-offset: 3px;
     }
 
-    footer {
-      margin-top: 4rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--line);
-      font-size: 0.85rem;
-      color: var(--muted);
+    /* ── Shared entrance ── */
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0);    }
     }
 
-    /* Quiet entrance, skipped for anyone who prefers reduced motion */
-    @media (prefers-reduced-motion: no-preference) {
-      .reveal {
-        opacity: 0;
-        transform: translateY(12px);
-        animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      }
-      .reveal:nth-child(1) { animation-delay: 0.05s; }
-      .reveal:nth-child(2) { animation-delay: 0.15s; }
-      .reveal:nth-child(3) { animation-delay: 0.25s; }
-      .reveal:nth-child(4) { animation-delay: 0.35s; }
-      @keyframes rise {
-        to { opacity: 1; transform: translateY(0); }
-      }
+    /* ── Responsive ── */
+
+    @media (max-width: 520px) {
+      .card { padding: 2.5rem 2rem; border-radius: 20px; }
+      .name { margin-bottom: 2.25rem; }
     }
+
+    /* ── Reduced motion ── */
 
     @media (prefers-reduced-motion: reduce) {
-      .ring { animation: none; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .card, .eyebrow, .name, .links { opacity: 1 !important; transform: none !important; }
     }
   </style>
 </head>
 <body>
-  <main class="stage">
-    <!-- Decorative ring motif -->
-    <svg class="ring" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="48" stroke-width="0.5" />
-      <circle cx="50" cy="50" r="38" stroke-width="0.5" stroke-dasharray="120 60" />
-    </svg>
 
-    <div class="content">
-      <!-- EDIT: small label above your name -->
-      <p class="eyebrow reveal">Personal&nbsp;site</p>
+  <div class="bg">
+    <div class="bg-photo" id="bgA"></div>
+    <div class="bg-photo" id="bgB" style="opacity:0"></div>
+    <div class="blob blob-green"></div>
+    <div class="blob blob-blue"></div>
+    <div class="blob blob-gold"></div>
+    <div class="bg-vignette"></div>
+    <div class="bg-grain"></div>
+  </div>
 
-      <!-- EDIT: your name -->
-      <h1 class="name reveal">Benjamin&nbsp;Ring</h1>
-
-      <!-- EDIT: replace the href values with your real links, or remove ones you don't need -->
-      <nav class="links reveal">
+  <div class="stage">
+    <main class="card">
+      <p class="eyebrow">Personal Webpage</p>
+      <h1 class="name">Benjamin<br>Ring</h1>
+      <nav class="links" aria-label="Links">
         <a href="mailto:contact@benjaminring.de">Email</a>
         <a href="https://github.com/BenjaminRing" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/b-ring/" target="_blank" rel="noopener">LinkedIn</a>
       </nav>
-
-      <footer>
-        <!-- EDIT or remove -->
-        &copy; <span id="year"></span> Benjamin Ring &middot; benjaminring.de
-      </footer>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script>
-    // Keeps the footer year current with no maintenance
-    document.getElementById("year").textContent = new Date().getFullYear();
+    const SLIDES = [
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=85', // mountain
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2400&q=85', // beach
+      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2400&q=85', // forest
+      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2400&q=85', // lake
+    ];
+
+    let idx = 0;
+    const bgA = document.getElementById('bgA');
+    const bgB = document.getElementById('bgB');
+    let active = bgA;
+
+    bgA.style.backgroundImage = `url('${SLIDES[0]}')`;
+
+    function nextSlide() {
+      idx = (idx + 1) % SLIDES.length;
+      const incoming = active === bgA ? bgB : bgA;
+      const img = new Image();
+      img.onload = () => {
+        incoming.style.backgroundImage = `url('${SLIDES[idx]}')`;
+        incoming.style.opacity = '1';
+        active.style.opacity = '0';
+        active = incoming;
+      };
+      img.src = SLIDES[idx];
+    }
+
+    // Preload all images
+    SLIDES.slice(1).forEach(src => { const i = new Image(); i.src = src; });
+    setInterval(nextSlide, 9000);
+
+    // Smooth mouse parallax
+    let tx = 0, ty = 0, px = 0, py = 0;
+    document.addEventListener('mousemove', e => {
+      tx = (e.clientX / innerWidth  - 0.5) * 2;
+      ty = (e.clientY / innerHeight - 0.5) * 2;
+    });
+    (function loop() {
+      px += (tx - px) * 0.05;
+      py += (ty - py) * 0.05;
+      const t = `translate(${px * -14}px, ${py * -10}px) scale(1.07)`;
+      bgA.style.transform = t;
+      bgB.style.transform = t;
+      requestAnimationFrame(loop);
+    })();
   </script>
 </body>
 </html>
