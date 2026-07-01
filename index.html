@@ -6,313 +6,423 @@
   <title>Benjamin Ring</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="description" content="The personal website of Benjamin Ring." />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; height: 100%; overflow: hidden; }
 
-    body {
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
       background: #0c1a0e;
       color: #fff;
-      font-family: 'Inter', system-ui, sans-serif;
-      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Background ── */
-
-    .bg {
+    #bg {
       position: fixed;
       inset: 0;
       z-index: 0;
     }
 
-    .bg-photo {
-      position: absolute;
-      inset: -8%;
-      background-size: cover;
-      background-position: center;
-      filter: brightness(0.72) saturate(1.15);
-      will-change: transform;
-      transition: opacity 3s ease-in-out;
-    }
-
-    /* Organic color light blobs — sit between photo and vignette */
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      filter: blur(100px);
-    }
-
-    .blob-green {
-      width: 750px; height: 750px;
-      background: radial-gradient(circle, rgba(52, 211, 130, 0.38) 0%, transparent 68%);
-      top: -18%; left: -12%;
-      animation: drift-a 24s ease-in-out infinite alternate;
-    }
-
-    .blob-blue {
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(56, 182, 255, 0.32) 0%, transparent 68%);
-      bottom: -12%; right: -10%;
-      animation: drift-b 30s ease-in-out infinite alternate;
-    }
-
-    .blob-gold {
-      width: 480px; height: 480px;
-      background: radial-gradient(circle, rgba(255, 196, 80, 0.26) 0%, transparent 68%);
-      top: 42%; right: 18%;
-      animation: drift-c 20s ease-in-out infinite alternate;
-    }
-
-    @keyframes drift-a {
-      0%   { transform: translate(  0px,   0px) scale(1.00); }
-      40%  { transform: translate( 50px,  70px) scale(1.12); }
-      100% { transform: translate( 80px, -45px) scale(0.92); }
-    }
-    @keyframes drift-b {
-      0%   { transform: translate(  0px,   0px) scale(1.00); }
-      50%  { transform: translate(-60px, -35px) scale(1.18); }
-      100% { transform: translate( 40px,  55px) scale(0.90); }
-    }
-    @keyframes drift-c {
-      0%   { transform: translate(  0px,  0px) scale(1.00); }
-      45%  { transform: translate( 35px,-50px) scale(1.10); }
-      100% { transform: translate(-45px, 25px) scale(0.94); }
-    }
-
-    /* Soft darkening vignette over blobs + photo */
-    .bg-vignette {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 85% 85% at 50% 50%, transparent 25%, rgba(8,14,10,0.70) 100%),
-        linear-gradient(to bottom, rgba(8,14,10,0.12) 0%, rgba(8,14,10,0.48) 100%);
-    }
-
-    /* Very subtle grain — adds photographic warmth */
-    .bg-grain {
-      position: absolute;
-      inset: -2%;
-      opacity: 0.038;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 256px 256px;
-      animation: grain 0.4s steps(2) infinite;
-    }
-
-    @keyframes grain {
-      0%   { transform: translate(  0px,  0px); }
-      25%  { transform: translate( -3px, -4px); }
-      50%  { transform: translate(  4px,  2px); }
-      75%  { transform: translate( -2px,  4px); }
-      100% { transform: translate(  3px, -3px); }
-    }
-
-    /* ── Stage ── */
-
     .stage {
       position: relative;
       z-index: 10;
-      min-height: 100vh;
-      min-height: 100dvh;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1.5rem;
+      flex-direction: column;
+      padding: 2.25rem 3rem;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      pointer-events: none;
     }
 
-    /* ── Glass card ── */
-
-    .card {
-      position: relative;
-      padding: 3.75rem 4rem;
-      max-width: 580px;
-      width: 100%;
-      background: rgba(6, 12, 8, 0.28);
-      backdrop-filter: blur(48px) saturate(1.5) brightness(1.08);
-      -webkit-backdrop-filter: blur(48px) saturate(1.5) brightness(1.08);
-      border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.09);
-      box-shadow:
-        0 40px 100px rgba(0, 0, 0, 0.45),
-        inset 0  1px 0 rgba(255, 255, 255, 0.10),
-        inset 0 -1px 0 rgba(0,   0,   0, 0.20);
-
+    /* ── Header ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
       opacity: 0;
-      transform: translateY(22px);
-      animation: emerge 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+      animation: fade-in 0.8s ease 0.2s forwards;
+    }
+
+    .monogram {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: 0.22em;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .nav {
+      display: flex;
+      gap: 0.4rem;
+      pointer-events: auto;
+    }
+
+    .nav a {
+      display: inline-block;
+      padding: 0.48rem 1.2rem;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition:
+        color        0.3s ease,
+        background   0.3s ease,
+        border-color 0.3s ease,
+        transform    0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .nav a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.30);
+      transform: translateY(-2px);
+    }
+
+    .nav a:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.45);
+      outline-offset: 3px;
+    }
+
+    /* ── Hero name ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 0.25rem;
+    }
+
+    .name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 300;
+      /* Edge-to-edge sizing like Buttermax */
+      font-size: clamp(5rem, 15.5vw, 15rem);
+      line-height: 0.87;
+      letter-spacing: -0.02em;
+      color: #fff;
+      text-shadow: 0 2px 80px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      transform: translateY(50px);
+      animation: emerge 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+    }
+
+    .name .last {
+      font-style: italic;
+      /* Slightly reduced opacity mirrors Buttermax's "max" script contrast */
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      padding-top: 1.5rem;
+      flex-shrink: 0;
+      opacity: 0;
+      animation: fade-in 0.9s ease 1.6s forwards;
+    }
+
+    .eyebrow {
+      font-size: 0.62rem;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.28);
+    }
+
+    /* ── Cursor dot ── */
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 100;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+      mix-blend-mode: difference;
     }
 
     @keyframes emerge {
       to { opacity: 1; transform: translateY(0); }
     }
-
-    /* ── Eyebrow ── */
-
-    .eyebrow {
-      font-size: 0.68rem;
-      font-weight: 400;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.45);
-      margin-bottom: 1.1rem;
-      opacity: 0;
-      animation: fade-up 0.9s ease 0.65s forwards;
+    @keyframes fade-in {
+      to { opacity: 1; }
     }
 
-    /* ── Name ── */
-
-    .name {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-weight: 300;
-      font-size: clamp(3.6rem, 9vw, 6.2rem);
-      line-height: 0.9;
-      letter-spacing: -0.01em;
-      color: #fff;
-      text-shadow: 0 2px 48px rgba(0, 0, 0, 0.35);
-      margin-bottom: 2.75rem;
-      opacity: 0;
-      animation: fade-up 1s ease 0.85s forwards;
+    @media (max-width: 600px) {
+      .stage { padding: 1.5rem 1.5rem; }
+      .nav a { padding: 0.42rem 0.9rem; font-size: 0.67rem; }
     }
-
-    /* ── Links ── */
-
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      opacity: 0;
-      animation: fade-up 0.9s ease 1.05s forwards;
-    }
-
-    .links a {
-      display: inline-block;
-      padding: 0.55rem 1.45rem;
-      font-size: 0.78rem;
-      font-weight: 400;
-      letter-spacing: 0.05em;
-      color: rgba(255, 255, 255, 0.72);
-      text-decoration: none;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      border-radius: 999px;
-      transition:
-        background  0.4s ease,
-        border-color 0.4s ease,
-        color        0.4s ease,
-        transform    0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-
-    .links a:hover {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: rgba(255, 255, 255, 0.28);
-      color: #fff;
-      transform: translateY(-3px);
-    }
-
-    .links a:focus-visible {
-      outline: 2px solid rgba(255, 255, 255, 0.5);
-      outline-offset: 3px;
-    }
-
-    /* ── Shared entrance ── */
-
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0);    }
-    }
-
-    /* ── Responsive ── */
-
-    @media (max-width: 520px) {
-      .card { padding: 2.5rem 2rem; border-radius: 20px; }
-      .name { margin-bottom: 2.25rem; }
-    }
-
-    /* ── Reduced motion ── */
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
-      .card, .eyebrow, .name, .links { opacity: 1 !important; transform: none !important; }
+      .name, .header, .footer { opacity: 1 !important; transform: none !important; }
+      .cursor { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <div class="bg">
-    <div class="bg-photo" id="bgA"></div>
-    <div class="bg-photo" id="bgB" style="opacity:0"></div>
-    <div class="blob blob-green"></div>
-    <div class="blob blob-blue"></div>
-    <div class="blob blob-gold"></div>
-    <div class="bg-vignette"></div>
-    <div class="bg-grain"></div>
-  </div>
+  <canvas id="bg"></canvas>
+  <div class="cursor" id="cursor"></div>
 
   <div class="stage">
-    <main class="card">
-      <p class="eyebrow">Personal Webpage</p>
-      <h1 class="name">Benjamin<br>Ring</h1>
-      <nav class="links" aria-label="Links">
+    <header class="header">
+      <span class="monogram">BR</span>
+      <nav class="nav" aria-label="Links">
         <a href="mailto:contact@benjaminring.de">Email</a>
         <a href="https://github.com/BenjaminRing" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/b-ring/" target="_blank" rel="noopener">LinkedIn</a>
       </nav>
+    </header>
+
+    <main class="hero">
+      <h1 class="name">
+        Benjamin<br>
+        <span class="last">Ring</span>
+      </h1>
     </main>
+
+    <footer class="footer">
+      <p class="eyebrow">Personal Webpage</p>
+    </footer>
   </div>
 
-  <script>
-    const SLIDES = [
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=85', // mountain
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2400&q=85', // beach
-      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2400&q=85', // forest
-      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2400&q=85', // lake
-    ];
-
-    let idx = 0;
-    const bgA = document.getElementById('bgA');
-    const bgB = document.getElementById('bgB');
-    let active = bgA;
-
-    bgA.style.backgroundImage = `url('${SLIDES[0]}')`;
-
-    function nextSlide() {
-      idx = (idx + 1) % SLIDES.length;
-      const incoming = active === bgA ? bgB : bgA;
-      const img = new Image();
-      img.onload = () => {
-        incoming.style.backgroundImage = `url('${SLIDES[idx]}')`;
-        incoming.style.opacity = '1';
-        active.style.opacity = '0';
-        active = incoming;
-      };
-      img.src = SLIDES[idx];
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js"
     }
+  }
+  </script>
 
-    // Preload all images
-    SLIDES.slice(1).forEach(src => { const i = new Image(); i.src = src; });
-    setInterval(nextSlide, 9000);
+  <script type="module">
+    import * as THREE from 'three';
 
-    // Smooth mouse parallax
-    let tx = 0, ty = 0, px = 0, py = 0;
-    document.addEventListener('mousemove', e => {
-      tx = (e.clientX / innerWidth  - 0.5) * 2;
-      ty = (e.clientY / innerHeight - 0.5) * 2;
+    // ── Renderer ──────────────────────────────────────────────────────────
+    const canvas = document.getElementById('bg');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.setClearColor(0x0c1a0e, 1);
+
+    // ── Scene & Camera ────────────────────────────────────────────────────
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
+    camera.position.z = 4.5;
+
+    // ── Shaders ───────────────────────────────────────────────────────────
+    const vert = /* glsl */`
+      uniform float uTime;
+      uniform vec2  uMouse;
+      varying vec3  vNormal;
+      varying vec3  vPos;
+
+      // Simplex 3-D noise — Ashima Arts (MIT)
+      vec3 mod289v3(vec3 x){return x-floor(x*(1./289.))*289.;}
+      vec4 mod289v4(vec4 x){return x-floor(x*(1./289.))*289.;}
+      vec4 permute(vec4 x){return mod289v4(((x*34.)+1.)*x);}
+      vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
+
+      float snoise(vec3 v){
+        const vec2 C=vec2(1./6.,1./3.);
+        const vec4 D=vec4(0.,.5,1.,2.);
+        vec3 i =floor(v+dot(v,C.yyy));
+        vec3 x0=v-i+dot(i,C.xxx);
+        vec3 g =step(x0.yzx,x0.xyz);
+        vec3 l =1.-g;
+        vec3 i1=min(g.xyz,l.zxy);
+        vec3 i2=max(g.xyz,l.zxy);
+        vec3 x1=x0-i1+C.xxx;
+        vec3 x2=x0-i2+C.yyy;
+        vec3 x3=x0-D.yyy;
+        i=mod289v3(i);
+        vec4 p=permute(permute(permute(
+          i.z+vec4(0.,i1.z,i2.z,1.))
+          +i.y+vec4(0.,i1.y,i2.y,1.))
+          +i.x+vec4(0.,i1.x,i2.x,1.));
+        float n_=.142857142857;
+        vec3 ns=n_*D.wyz-D.xzx;
+        vec4 j=p-49.*floor(p*ns.z*ns.z);
+        vec4 x_=floor(j*ns.z);
+        vec4 y_=floor(j-7.*x_);
+        vec4 x=x_*ns.x+ns.yyyy;
+        vec4 y=y_*ns.x+ns.yyyy;
+        vec4 h=1.-abs(x)-abs(y);
+        vec4 b0=vec4(x.xy,y.xy);
+        vec4 b1=vec4(x.zw,y.zw);
+        vec4 s0=floor(b0)*2.+1.;
+        vec4 s1=floor(b1)*2.+1.;
+        vec4 sh=-step(h,vec4(0.));
+        vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
+        vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+        vec3 p0=vec3(a0.xy,h.x);
+        vec3 p1=vec3(a0.zw,h.y);
+        vec3 p2=vec3(a1.xy,h.z);
+        vec3 p3=vec3(a1.zw,h.w);
+        vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+        p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+        vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);
+        m=m*m;
+        return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+      }
+
+      void main(){
+        vNormal = normalize(normalMatrix * normal);
+        float t = uTime * 0.35;
+
+        // Three octaves of noise for an organic, living surface
+        float n  = snoise(position * 1.0 + vec3(t*.65, t*.40, t*.50));
+        float n2 = snoise(position * 2.1 - vec3(t*.45, t*.72, t*.30)) * 0.40;
+        float n3 = snoise(position * 4.2 + vec3(t*.28, t*.55, t*.82)) * 0.15;
+        float disp = (n + n2 + n3) * 0.22;
+
+        // Mouse nudges the surface where the cursor points
+        float md = dot(normalize(position.xy), uMouse);
+        disp += smoothstep(0.2, 1.0, md) * 0.14;
+
+        vPos = position + normal * disp;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(vPos, 1.0);
+      }
+    `;
+
+    const frag = /* glsl */`
+      uniform float uTime;
+      uniform vec2  uMouse;
+      varying vec3  vNormal;
+      varying vec3  vPos;
+
+      void main(){
+        vec3 n = normalize(vNormal);
+
+        // Fresnel edge glow
+        vec3 view = normalize(cameraPosition - vPos);
+        float fr = pow(1.0 - clamp(dot(n, view), 0.0, 1.0), 3.0);
+
+        // Palette — forest dark to vivid green, with blue edge and gold accent
+        vec3 dark   = vec3(0.030, 0.090, 0.040);
+        vec3 midG   = vec3(0.070, 0.320, 0.140);
+        vec3 brightG= vec3(0.200, 0.820, 0.470);
+        vec3 blue   = vec3(0.180, 0.620, 0.960);
+        vec3 gold   = vec3(0.960, 0.750, 0.210);
+
+        // Normal-driven lighting
+        float nUp = dot(n, normalize(vec3(0.3, 1.0, 0.6))) * 0.5 + 0.5;
+        vec3 col  = mix(dark, midG, nUp * 0.55);
+        col = mix(col, brightG, pow(nUp, 2.8) * 0.40);
+
+        // Mouse-directed gold shimmer
+        float mg = dot(normalize(vPos.xy), uMouse);
+        col = mix(col, gold, smoothstep(0.5, 1.0, mg) * 0.30);
+
+        // Animated surface banding
+        float band = sin(vPos.y * 7.0 + uTime * 1.3) * 0.5 + 0.5;
+        col += brightG * band * 0.042;
+
+        // Fresnel → blue edge glow
+        col = mix(col, blue, fr * 0.72);
+
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `;
+
+    // ── Organic blob ──────────────────────────────────────────────────────
+    const geo = new THREE.SphereGeometry(1.65, 128, 128);
+    const uniforms = {
+      uTime:  { value: 0 },
+      uMouse: { value: new THREE.Vector2() },
+    };
+    const mat  = new THREE.ShaderMaterial({ vertexShader: vert, fragmentShader: frag, uniforms });
+    const blob = new THREE.Mesh(geo, mat);
+    scene.add(blob);
+
+    // ── Floating particles ────────────────────────────────────────────────
+    const N = 900;
+    const pts = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      pts[i*3]   = (Math.random() - 0.5) * 14;
+      pts[i*3+1] = (Math.random() - 0.5) * 9;
+      pts[i*3+2] = (Math.random() - 0.5) * 6 - 2;
+    }
+    const pGeo = new THREE.BufferGeometry();
+    pGeo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
+    const pMat = new THREE.PointsMaterial({
+      color: 0x34d382, size: 0.013, transparent: true, opacity: 0.25, sizeAttenuation: true,
     });
+    scene.add(new THREE.Points(pGeo, pMat));
+
+    // ── Mouse & touch tracking ────────────────────────────────────────────
+    const tgt = new THREE.Vector2();
+    const cur = new THREE.Vector2();
+
+    const onMove = (x, y) => {
+      tgt.x =  (x / innerWidth  - 0.5) * 2;
+      tgt.y = -(y / innerHeight - 0.5) * 2;
+    };
+    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    window.addEventListener('touchmove', e => {
+      onMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    // ── Blob position: right-of-center on wide, centred on mobile ────────
+    const setPosition = () => {
+      blob.position.x = innerWidth > 700 ? 0.85 : 0;
+      blob.position.y = innerWidth > 700 ? -0.15 : -0.5;
+    };
+    setPosition();
+
+    // ── Resize ────────────────────────────────────────────────────────────
+    window.addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+      setPosition();
+    });
+
+    // ── Cursor dot ───────────────────────────────────────────────────────
+    const cursorEl = document.getElementById('cursor');
+    let cx = innerWidth / 2, cy = innerHeight / 2;
+    let tcx = cx, tcy = cy;
+    window.addEventListener('mousemove', e => { tcx = e.clientX; tcy = e.clientY; });
+    document.querySelectorAll('a').forEach(a => {
+      a.addEventListener('mouseenter', () => cursorEl.style.transform = 'translate(-50%,-50%) scale(2.5)');
+      a.addEventListener('mouseleave', () => cursorEl.style.transform = 'translate(-50%,-50%) scale(1)');
+    });
+
+    // ── Render loop ───────────────────────────────────────────────────────
+    const clock = new THREE.Clock();
     (function loop() {
-      px += (tx - px) * 0.05;
-      py += (ty - py) * 0.05;
-      const t = `translate(${px * -14}px, ${py * -10}px) scale(1.07)`;
-      bgA.style.transform = t;
-      bgB.style.transform = t;
       requestAnimationFrame(loop);
+      const t = clock.getElapsedTime();
+
+      // Smooth mouse lerp
+      cur.x += (tgt.x - cur.x) * 0.045;
+      cur.y += (tgt.y - cur.y) * 0.045;
+
+      uniforms.uTime.value = t;
+      uniforms.uMouse.value.copy(cur);
+
+      // Gentle rotation + mouse tilt
+      blob.rotation.y = t * 0.07 + cur.x * 0.42;
+      blob.rotation.x = cur.y * 0.28;
+
+      // Smooth cursor
+      cx += (tcx - cx) * 0.12;
+      cy += (tcy - cy) * 0.12;
+      cursorEl.style.left = cx + 'px';
+      cursorEl.style.top  = cy + 'px';
+
+      renderer.render(scene, camera);
     })();
   </script>
 </body>
