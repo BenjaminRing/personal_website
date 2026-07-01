@@ -8,15 +8,23 @@
   <meta name="description" content="The personal website of Benjamin Ring." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      /* ── Buttermax palette ── */
+      --yellow: #FFD600;   /* color0 */
+      --black:  #101010;   /* color1 */
+      --gray:   #868686;   /* color2 */
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
       width: 100%; height: 100%;
       overflow: hidden;
-      background: #0c1a0e;
-      color: #fff;
+      background: var(--black);
+      color: var(--yellow);
+      cursor: none;
     }
 
     #bg {
@@ -52,9 +60,9 @@
     .monogram {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 1rem;
-      font-weight: 300;
+      font-weight: 500;
       letter-spacing: 0.22em;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--gray);
     }
 
     .nav {
@@ -67,31 +75,30 @@
       display: inline-block;
       padding: 0.48rem 1.2rem;
       font-size: 0.7rem;
-      font-weight: 400;
+      font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--yellow);
       text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(16, 16, 16, 0.55);
+      border: 1px solid var(--yellow);
       border-radius: 999px;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       transition:
         color        0.3s ease,
         background   0.3s ease,
-        border-color 0.3s ease,
         transform    0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .nav a:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.09);
-      border-color: rgba(255, 255, 255, 0.30);
+      color: var(--black);
+      background: var(--yellow);
       transform: translateY(-2px);
     }
 
     .nav a:focus-visible {
-      outline: 2px solid rgba(255, 255, 255, 0.45);
+      outline: 2px solid var(--yellow);
       outline-offset: 3px;
     }
 
@@ -106,13 +113,13 @@
 
     .name {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-weight: 300;
-      /* Edge-to-edge sizing like Buttermax */
+      font-weight: 500;
       font-size: clamp(5rem, 15.5vw, 15rem);
       line-height: 0.87;
       letter-spacing: -0.02em;
-      color: #fff;
-      text-shadow: 0 2px 80px rgba(0, 0, 0, 0.25);
+      color: var(--yellow);
+      /* Smear passing behind the letters flips them yellow <-> black */
+      mix-blend-mode: difference;
       opacity: 0;
       transform: translateY(50px);
       animation: emerge 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
@@ -120,8 +127,7 @@
 
     .name .last {
       font-style: italic;
-      /* Slightly reduced opacity mirrors Buttermax's "max" script contrast */
-      color: rgba(255, 255, 255, 0.78);
+      font-weight: 400;
     }
 
     /* ── Footer ── */
@@ -136,38 +142,39 @@
       font-size: 0.62rem;
       letter-spacing: 0.32em;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.28);
+      color: var(--gray);
     }
 
-    /* ── Cursor dot ── */
+    /* ── Cursor ── */
     .cursor {
       position: fixed;
-      width: 8px; height: 8px;
-      background: rgba(255, 255, 255, 0.7);
+      top: 0; left: 0;
+      width: 14px; height: 14px;
+      border: 1.5px solid var(--yellow);
       border-radius: 50%;
       pointer-events: none;
       z-index: 100;
       transform: translate(-50%, -50%);
-      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+      transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
       mix-blend-mode: difference;
     }
+    .cursor.big {
+      width: 46px; height: 46px;
+      background: rgba(255, 214, 0, 0.15);
+    }
 
-    @keyframes emerge {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fade-in {
-      to { opacity: 1; }
-    }
+    @keyframes emerge { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fade-in { to { opacity: 1; } }
 
     @media (max-width: 600px) {
       .stage { padding: 1.5rem 1.5rem; }
       .nav a { padding: 0.42rem 0.9rem; font-size: 0.67rem; }
+      html, body { cursor: auto; }
+      .cursor { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      .name, .header, .footer { opacity: 1 !important; transform: none !important; }
-      .cursor { display: none; }
+      .name, .header, .footer { animation: none !important; opacity: 1 !important; transform: none !important; }
     }
   </style>
 </head>
@@ -209,145 +216,249 @@
   <script type="module">
     import * as THREE from 'three';
 
+    const YELLOW = new THREE.Color('#FFD600');
+
     // ── Renderer ──────────────────────────────────────────────────────────
     const canvas = document.getElementById('bg');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const DPR = Math.min(window.devicePixelRatio, 2);
+    renderer.setPixelRatio(DPR);
     renderer.setSize(innerWidth, innerHeight);
-    renderer.setClearColor(0x0c1a0e, 1);
+    renderer.setClearColor(0x101010, 1);
+    renderer.autoClear = false;
 
-    // ── Scene & Camera ────────────────────────────────────────────────────
-    const scene  = new THREE.Scene();
+    // Fullscreen-quad camera reused by every 2D pass
+    const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const quadGeo = new THREE.PlaneGeometry(2, 2);
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  1. FLUID SMEAR — ping-pong feedback buffer that trails the cursor
+    // ─────────────────────────────────────────────────────────────────────
+    const SMEAR_SCALE = 0.5;                         // half-res for softness + speed
+    const smearOpts = {
+      type: THREE.HalfFloatType,
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      depthBuffer: false,
+      stencilBuffer: false,
+    };
+    const rtSize = () => [
+      Math.max(2, Math.floor(innerWidth  * DPR * SMEAR_SCALE)),
+      Math.max(2, Math.floor(innerHeight * DPR * SMEAR_SCALE)),
+    ];
+    let [rw, rh] = rtSize();
+    let rtA = new THREE.WebGLRenderTarget(rw, rh, smearOpts);
+    let rtB = new THREE.WebGLRenderTarget(rw, rh, smearOpts);
+
+    const smearMat = new THREE.ShaderMaterial({
+      uniforms: {
+        uPrev:     { value: null },
+        uMouse:    { value: new THREE.Vector2(0.5, 0.5) },
+        uVel:      { value: new THREE.Vector2(0, 0) },
+        uAspect:   { value: innerWidth / innerHeight },
+        uTime:     { value: 0 },
+        uActive:   { value: 0 },
+      },
+      vertexShader: /* glsl */`
+        varying vec2 vUv;
+        void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
+      `,
+      fragmentShader: /* glsl */`
+        precision highp float;
+        uniform sampler2D uPrev;
+        uniform vec2  uMouse;
+        uniform vec2  uVel;
+        uniform float uAspect;
+        uniform float uTime;
+        uniform float uActive;
+        varying vec2  vUv;
+
+        // Warm Buttermax-family glow: yellow -> amber -> warm white
+        vec3 palette(float t){
+          vec3 yellow = vec3(1.000, 0.839, 0.000);   // #FFD600
+          vec3 amber  = vec3(1.000, 0.520, 0.020);
+          vec3 warm   = vec3(1.000, 0.960, 0.820);
+          float a = sin(t * 0.70)        * 0.5 + 0.5;
+          float b = sin(t * 0.43 + 1.7)  * 0.5 + 0.5;
+          vec3 c = mix(yellow, amber, a);
+          c = mix(c, warm, b * 0.45);
+          return c;
+        }
+
+        void main(){
+          vec2 uv = vUv;
+
+          // Advect the field along cursor velocity → the smear "drags"
+          vec2 advect = uVel * 0.90;
+          vec3 prev = texture2D(uPrev, uv - advect).rgb;
+
+          // Slow dissipation so trails linger then fade
+          prev *= 0.972;
+
+          // Splat at the cursor, stronger + wider with faster movement
+          vec2 d = uv - uMouse;
+          d.x *= uAspect;
+          float dist = length(d);
+          float speed = length(uVel);
+          float radius = 0.11 + speed * 6.0;
+          float splat = smoothstep(radius, 0.0, dist);
+          splat *= (0.11 + speed * 22.0) * uActive;
+
+          vec3 ink = palette(uTime + dist * 6.0 + uMouse.x * 3.0);
+
+          vec3 outc = prev + ink * splat;
+          outc = min(outc, vec3(1.6));                // clamp runaway accumulation
+          gl_FragColor = vec4(outc, 1.0);
+        }
+      `,
+    });
+    const smearQuad  = new THREE.Mesh(quadGeo, smearMat);
+    const smearScene = new THREE.Scene();
+    smearScene.add(smearQuad);
+
+    // Clear both targets to black
+    function clearTargets(){
+      const clr = new THREE.MeshBasicMaterial({ color: 0x000000 });
+      const m = new THREE.Mesh(quadGeo, clr);
+      const s = new THREE.Scene(); s.add(m);
+      for (const rt of [rtA, rtB]) {
+        renderer.setRenderTarget(rt);
+        renderer.clear(true, true, true);
+        renderer.render(s, quadCam);
+      }
+      renderer.setRenderTarget(null);
+      clr.dispose();
+    }
+    clearTargets();
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  2. DISPLAY PASS — draw the smear buffer to the screen
+    // ─────────────────────────────────────────────────────────────────────
+    const displayMat = new THREE.ShaderMaterial({
+      uniforms: { uTex: { value: null } },
+      depthTest: false,
+      depthWrite: false,
+      vertexShader: /* glsl */`
+        varying vec2 vUv;
+        void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
+      `,
+      fragmentShader: /* glsl */`
+        precision highp float;
+        uniform sampler2D uTex;
+        varying vec2 vUv;
+        void main(){
+          vec3 smear = texture2D(uTex, vUv).rgb;
+          // Sits over the black canvas; a faint floor keeps it from being pure black
+          vec3 col = vec3(0.063) * (1.0 - min(1.0, length(smear))) + smear;
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `,
+    });
+    const displayQuad  = new THREE.Mesh(quadGeo, displayMat);
+    const displayScene = new THREE.Scene();
+    displayScene.add(displayQuad);
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  3. THE OBJECT — organic sphere, tinted by the smear behind it
+    // ─────────────────────────────────────────────────────────────────────
+    const sphereScene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
     camera.position.z = 4.5;
 
-    // ── Shaders ───────────────────────────────────────────────────────────
-    const vert = /* glsl */`
-      uniform float uTime;
-      uniform vec2  uMouse;
-      varying vec3  vNormal;
-      varying vec3  vPos;
+    const sphereMat = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime:       { value: 0 },
+        uMouse:      { value: new THREE.Vector2() },
+        uSmear:      { value: null },
+        uResolution: { value: new THREE.Vector2(innerWidth * DPR, innerHeight * DPR) },
+        uYellow:     { value: YELLOW },
+      },
+      vertexShader: /* glsl */`
+        uniform float uTime;
+        uniform vec2  uMouse;
+        varying vec3  vNormal;
+        varying vec3  vPos;
 
-      // Simplex 3-D noise — Ashima Arts (MIT)
-      vec3 mod289v3(vec3 x){return x-floor(x*(1./289.))*289.;}
-      vec4 mod289v4(vec4 x){return x-floor(x*(1./289.))*289.;}
-      vec4 permute(vec4 x){return mod289v4(((x*34.)+1.)*x);}
-      vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
+        // Simplex 3-D noise — Ashima Arts (MIT)
+        vec3 mod289v3(vec3 x){return x-floor(x*(1./289.))*289.;}
+        vec4 mod289v4(vec4 x){return x-floor(x*(1./289.))*289.;}
+        vec4 permute(vec4 x){return mod289v4(((x*34.)+1.)*x);}
+        vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
+        float snoise(vec3 v){
+          const vec2 C=vec2(1./6.,1./3.); const vec4 D=vec4(0.,.5,1.,2.);
+          vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
+          vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.-g;
+          vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
+          vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy;
+          i=mod289v3(i);
+          vec4 p=permute(permute(permute(
+            i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))
+            +i.x+vec4(0.,i1.x,i2.x,1.));
+          float n_=.142857142857; vec3 ns=n_*D.wyz-D.xzx;
+          vec4 j=p-49.*floor(p*ns.z*ns.z);
+          vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.*x_);
+          vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy;
+          vec4 h=1.-abs(x)-abs(y);
+          vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw);
+          vec4 s0=floor(b0)*2.+1.; vec4 s1=floor(b1)*2.+1.;
+          vec4 sh=-step(h,vec4(0.));
+          vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+          vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y);
+          vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
+          vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+          p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
+          vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.); m=m*m;
+          return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+        }
 
-      float snoise(vec3 v){
-        const vec2 C=vec2(1./6.,1./3.);
-        const vec4 D=vec4(0.,.5,1.,2.);
-        vec3 i =floor(v+dot(v,C.yyy));
-        vec3 x0=v-i+dot(i,C.xxx);
-        vec3 g =step(x0.yzx,x0.xyz);
-        vec3 l =1.-g;
-        vec3 i1=min(g.xyz,l.zxy);
-        vec3 i2=max(g.xyz,l.zxy);
-        vec3 x1=x0-i1+C.xxx;
-        vec3 x2=x0-i2+C.yyy;
-        vec3 x3=x0-D.yyy;
-        i=mod289v3(i);
-        vec4 p=permute(permute(permute(
-          i.z+vec4(0.,i1.z,i2.z,1.))
-          +i.y+vec4(0.,i1.y,i2.y,1.))
-          +i.x+vec4(0.,i1.x,i2.x,1.));
-        float n_=.142857142857;
-        vec3 ns=n_*D.wyz-D.xzx;
-        vec4 j=p-49.*floor(p*ns.z*ns.z);
-        vec4 x_=floor(j*ns.z);
-        vec4 y_=floor(j-7.*x_);
-        vec4 x=x_*ns.x+ns.yyyy;
-        vec4 y=y_*ns.x+ns.yyyy;
-        vec4 h=1.-abs(x)-abs(y);
-        vec4 b0=vec4(x.xy,y.xy);
-        vec4 b1=vec4(x.zw,y.zw);
-        vec4 s0=floor(b0)*2.+1.;
-        vec4 s1=floor(b1)*2.+1.;
-        vec4 sh=-step(h,vec4(0.));
-        vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;
-        vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-        vec3 p0=vec3(a0.xy,h.x);
-        vec3 p1=vec3(a0.zw,h.y);
-        vec3 p2=vec3(a1.xy,h.z);
-        vec3 p3=vec3(a1.zw,h.w);
-        vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
-        p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
-        vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.);
-        m=m*m;
-        return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-      }
+        void main(){
+          vNormal = normalize(normalMatrix * normal);
+          float t = uTime * 0.35;
+          float n  = snoise(position * 1.0 + vec3(t*.65, t*.40, t*.50));
+          float n2 = snoise(position * 2.1 - vec3(t*.45, t*.72, t*.30)) * 0.40;
+          float n3 = snoise(position * 4.2 + vec3(t*.28, t*.55, t*.82)) * 0.15;
+          float disp = (n + n2 + n3) * 0.22;
+          float md = dot(normalize(position.xy), uMouse);
+          disp += smoothstep(0.2, 1.0, md) * 0.14;
+          vPos = position + normal * disp;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(vPos, 1.0);
+        }
+      `,
+      fragmentShader: /* glsl */`
+        precision highp float;
+        uniform vec2      uResolution;
+        uniform sampler2D uSmear;
+        uniform vec3      uYellow;
+        varying vec3      vNormal;
+        varying vec3      vPos;
 
-      void main(){
-        vNormal = normalize(normalMatrix * normal);
-        float t = uTime * 0.35;
+        void main(){
+          vec3 n = normalize(vNormal);
+          vec3 view = normalize(cameraPosition - vPos);
+          float fres = pow(1.0 - clamp(dot(n, view), 0.0, 1.0), 2.6);
 
-        // Three octaves of noise for an organic, living surface
-        float n  = snoise(position * 1.0 + vec3(t*.65, t*.40, t*.50));
-        float n2 = snoise(position * 2.1 - vec3(t*.45, t*.72, t*.30)) * 0.40;
-        float n3 = snoise(position * 4.2 + vec3(t*.28, t*.55, t*.82)) * 0.15;
-        float disp = (n + n2 + n3) * 0.22;
+          // Sample the smear buffer directly behind this pixel of the object
+          vec2 screenUv = gl_FragCoord.xy / uResolution;
+          vec3 smear = texture2D(uSmear, screenUv).rgb;
 
-        // Mouse nudges the surface where the cursor points
-        float md = dot(normalize(position.xy), uMouse);
-        disp += smoothstep(0.2, 1.0, md) * 0.14;
+          // Dark charcoal body that takes on the colour of the smear behind it
+          float lambert = dot(n, normalize(vec3(0.4, 0.8, 0.6))) * 0.5 + 0.5;
+          vec3 body = vec3(0.055) + vec3(0.075) * lambert;
+          body += smear * 0.85;                       // ← changes colour w/ smear behind it
 
-        vPos = position + normal * disp;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(vPos, 1.0);
-      }
-    `;
+          // Yellow fresnel rim keeps it on-palette
+          vec3 col = body + uYellow * fres * 0.9;
 
-    const frag = /* glsl */`
-      uniform float uTime;
-      uniform vec2  uMouse;
-      varying vec3  vNormal;
-      varying vec3  vPos;
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `,
+    });
 
-      void main(){
-        vec3 n = normalize(vNormal);
+    const sphere = new THREE.Mesh(new THREE.SphereGeometry(1.6, 128, 128), sphereMat);
+    sphereScene.add(sphere);
 
-        // Fresnel edge glow
-        vec3 view = normalize(cameraPosition - vPos);
-        float fr = pow(1.0 - clamp(dot(n, view), 0.0, 1.0), 3.0);
-
-        // Palette — forest dark to vivid green, with blue edge and gold accent
-        vec3 dark   = vec3(0.030, 0.090, 0.040);
-        vec3 midG   = vec3(0.070, 0.320, 0.140);
-        vec3 brightG= vec3(0.200, 0.820, 0.470);
-        vec3 blue   = vec3(0.180, 0.620, 0.960);
-        vec3 gold   = vec3(0.960, 0.750, 0.210);
-
-        // Normal-driven lighting
-        float nUp = dot(n, normalize(vec3(0.3, 1.0, 0.6))) * 0.5 + 0.5;
-        vec3 col  = mix(dark, midG, nUp * 0.55);
-        col = mix(col, brightG, pow(nUp, 2.8) * 0.40);
-
-        // Mouse-directed gold shimmer
-        float mg = dot(normalize(vPos.xy), uMouse);
-        col = mix(col, gold, smoothstep(0.5, 1.0, mg) * 0.30);
-
-        // Animated surface banding
-        float band = sin(vPos.y * 7.0 + uTime * 1.3) * 0.5 + 0.5;
-        col += brightG * band * 0.042;
-
-        // Fresnel → blue edge glow
-        col = mix(col, blue, fr * 0.72);
-
-        gl_FragColor = vec4(col, 1.0);
-      }
-    `;
-
-    // ── Organic blob ──────────────────────────────────────────────────────
-    const geo = new THREE.SphereGeometry(1.65, 128, 128);
-    const uniforms = {
-      uTime:  { value: 0 },
-      uMouse: { value: new THREE.Vector2() },
-    };
-    const mat  = new THREE.ShaderMaterial({ vertexShader: vert, fragmentShader: frag, uniforms });
-    const blob = new THREE.Mesh(geo, mat);
-    scene.add(blob);
-
-    // ── Floating particles ────────────────────────────────────────────────
-    const N = 900;
+    // Floating specks for depth
+    const N = 700;
     const pts = new Float32Array(N * 3);
     for (let i = 0; i < N; i++) {
       pts[i*3]   = (Math.random() - 0.5) * 14;
@@ -356,74 +467,108 @@
     }
     const pGeo = new THREE.BufferGeometry();
     pGeo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-    const pMat = new THREE.PointsMaterial({
-      color: 0x34d382, size: 0.013, transparent: true, opacity: 0.25, sizeAttenuation: true,
+    sphereScene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
+      color: 0xFFD600, size: 0.012, transparent: true, opacity: 0.22, sizeAttenuation: true,
+    })));
+
+    function setSpherePos(){
+      sphere.position.x = innerWidth > 700 ? 0.9 : 0;
+      sphere.position.y = innerWidth > 700 ? -0.1 : -0.5;
+    }
+    setSpherePos();
+
+    // ─────────────────────────────────────────────────────────────────────
+    //  Input
+    // ─────────────────────────────────────────────────────────────────────
+    const mouse     = new THREE.Vector2(0.5, 0.5);  // normalized 0..1
+    const prevMouse = new THREE.Vector2(0.5, 0.5);
+    const vel       = new THREE.Vector2(0, 0);
+    let hasMoved = false;
+
+    const tiltTarget = new THREE.Vector2();
+    const tilt       = new THREE.Vector2();
+
+    function pointer(x, y){
+      mouse.set(x / innerWidth, 1.0 - y / innerHeight);
+      tiltTarget.set((x / innerWidth - 0.5) * 2, -(y / innerHeight - 0.5) * 2);
+      hasMoved = true;
+      tcx = x; tcy = y;
+    }
+    window.addEventListener('mousemove', e => pointer(e.clientX, e.clientY));
+    window.addEventListener('touchmove', e => pointer(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+
+    // Custom cursor
+    const cursorEl = document.getElementById('cursor');
+    let cx = innerWidth / 2, cy = innerHeight / 2, tcx = cx, tcy = cy;
+    document.querySelectorAll('a').forEach(a => {
+      a.addEventListener('mouseenter', () => cursorEl.classList.add('big'));
+      a.addEventListener('mouseleave', () => cursorEl.classList.remove('big'));
     });
-    scene.add(new THREE.Points(pGeo, pMat));
 
-    // ── Mouse & touch tracking ────────────────────────────────────────────
-    const tgt = new THREE.Vector2();
-    const cur = new THREE.Vector2();
-
-    const onMove = (x, y) => {
-      tgt.x =  (x / innerWidth  - 0.5) * 2;
-      tgt.y = -(y / innerHeight - 0.5) * 2;
-    };
-    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
-    window.addEventListener('touchmove', e => {
-      onMove(e.touches[0].clientX, e.touches[0].clientY);
-    }, { passive: true });
-
-    // ── Blob position: right-of-center on wide, centred on mobile ────────
-    const setPosition = () => {
-      blob.position.x = innerWidth > 700 ? 0.85 : 0;
-      blob.position.y = innerWidth > 700 ? -0.15 : -0.5;
-    };
-    setPosition();
-
-    // ── Resize ────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────
+    //  Resize
+    // ─────────────────────────────────────────────────────────────────────
     window.addEventListener('resize', () => {
       camera.aspect = innerWidth / innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(innerWidth, innerHeight);
-      setPosition();
+      sphereMat.uniforms.uResolution.value.set(innerWidth * DPR, innerHeight * DPR);
+      smearMat.uniforms.uAspect.value = innerWidth / innerHeight;
+      [rw, rh] = rtSize();
+      rtA.setSize(rw, rh);
+      rtB.setSize(rw, rh);
+      clearTargets();
+      setSpherePos();
     });
 
-    // ── Cursor dot ───────────────────────────────────────────────────────
-    const cursorEl = document.getElementById('cursor');
-    let cx = innerWidth / 2, cy = innerHeight / 2;
-    let tcx = cx, tcy = cy;
-    window.addEventListener('mousemove', e => { tcx = e.clientX; tcy = e.clientY; });
-    document.querySelectorAll('a').forEach(a => {
-      a.addEventListener('mouseenter', () => cursorEl.style.transform = 'translate(-50%,-50%) scale(2.5)');
-      a.addEventListener('mouseleave', () => cursorEl.style.transform = 'translate(-50%,-50%) scale(1)');
-    });
-
-    // ── Render loop ───────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────
+    //  Render loop
+    // ─────────────────────────────────────────────────────────────────────
     const clock = new THREE.Clock();
-    (function loop() {
-      requestAnimationFrame(loop);
+
+    function frame(){
+      requestAnimationFrame(frame);
       const t = clock.getElapsedTime();
 
-      // Smooth mouse lerp
-      cur.x += (tgt.x - cur.x) * 0.045;
-      cur.y += (tgt.y - cur.y) * 0.045;
+      // Mouse velocity (smoothed)
+      const vx = mouse.x - prevMouse.x;
+      const vy = mouse.y - prevMouse.y;
+      vel.x += (vx - vel.x) * 0.35;
+      vel.y += (vy - vel.y) * 0.35;
+      prevMouse.copy(mouse);
 
-      uniforms.uTime.value = t;
-      uniforms.uMouse.value.copy(cur);
+      // 1. Smear update (rtA → rtB)
+      smearMat.uniforms.uPrev.value  = rtA.texture;
+      smearMat.uniforms.uMouse.value.copy(mouse);
+      smearMat.uniforms.uVel.value.copy(vel);
+      smearMat.uniforms.uTime.value  = t;
+      smearMat.uniforms.uActive.value = hasMoved ? 1.0 : 0.0;
+      renderer.setRenderTarget(rtB);
+      renderer.render(smearScene, quadCam);
+      const tmp = rtA; rtA = rtB; rtB = tmp;
 
-      // Gentle rotation + mouse tilt
-      blob.rotation.y = t * 0.07 + cur.x * 0.42;
-      blob.rotation.x = cur.y * 0.28;
+      // 2. Draw smear to screen
+      renderer.setRenderTarget(null);
+      renderer.clear(true, true, true);
+      displayMat.uniforms.uTex.value = rtA.texture;
+      renderer.render(displayScene, quadCam);
 
-      // Smooth cursor
-      cx += (tcx - cx) * 0.12;
-      cy += (tcy - cy) * 0.12;
-      cursorEl.style.left = cx + 'px';
-      cursorEl.style.top  = cy + 'px';
+      // 3. Object on top, sampling the smear behind it
+      tilt.x += (tiltTarget.x - tilt.x) * 0.05;
+      tilt.y += (tiltTarget.y - tilt.y) * 0.05;
+      sphere.rotation.y = t * 0.07 + tilt.x * 0.42;
+      sphere.rotation.x = tilt.y * 0.28;
+      sphereMat.uniforms.uTime.value  = t;
+      sphereMat.uniforms.uMouse.value.copy(tilt);
+      sphereMat.uniforms.uSmear.value = rtA.texture;
+      renderer.render(sphereScene, camera);
 
-      renderer.render(scene, camera);
-    })();
+      // Cursor
+      cx += (tcx - cx) * 0.18;
+      cy += (tcy - cy) * 0.18;
+      cursorEl.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
+    }
+    frame();
   </script>
 </body>
 </html>
