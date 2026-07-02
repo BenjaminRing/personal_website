@@ -225,9 +225,9 @@
        GPU FLUID SOLVER — the velocity field liquid-distorts the photo.
        ═══════════════════════════════════════════════════════════════════════ */
     const SIM = {
-      RESOLUTION: 200, VEL_DISSIPATION: 0.18,
+      RESOLUTION: 200, VEL_DISSIPATION: 0.15,
       PRESSURE: 0.8, PRESSURE_ITER: 20, CURL: 22,
-      SPLAT_RADIUS: 0.0032, SPLAT_FORCE: 7600,
+      SPLAT_RADIUS: 0.0044, SPLAT_FORCE: 7600,
     };
 
     function getRes(res){
@@ -391,7 +391,7 @@
       uVelocity: { value: null },
       uFade: { value: 0 }, uAspA: { value: 1.5 }, uAspB: { value: 1.5 },
       uScreenAsp: { value: innerWidth / innerHeight },
-      uDisplace: { value: 0.06 }, uTime: { value: 0 },
+      uDisplace: { value: 0.072 }, uTime: { value: 0 },
       uParallax: { value: new THREE.Vector2() },
     });
 
@@ -419,7 +419,6 @@
     /* ── Nature slideshow textures ── */
     const SLIDES = [
       'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=85', // mountain
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2400&q=85', // beach
       'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2400&q=85', // forest
       'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2400&q=85', // lake
     ];
