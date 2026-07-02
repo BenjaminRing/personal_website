@@ -225,9 +225,9 @@
        GPU FLUID SOLVER — the velocity field liquid-distorts the photo.
        ═══════════════════════════════════════════════════════════════════════ */
     const SIM = {
-      RESOLUTION: 200, VEL_DISSIPATION: 0.15,
+      RESOLUTION: 200, VEL_DISSIPATION: 0.24,
       PRESSURE: 0.8, PRESSURE_ITER: 20, CURL: 22,
-      SPLAT_RADIUS: 0.0044, SPLAT_FORCE: 7600,
+      SPLAT_RADIUS: 0.0024, SPLAT_FORCE: 6200,
     };
 
     function getRes(res){
@@ -391,7 +391,7 @@
       uVelocity: { value: null },
       uFade: { value: 0 }, uAspA: { value: 1.5 }, uAspB: { value: 1.5 },
       uScreenAsp: { value: innerWidth / innerHeight },
-      uDisplace: { value: 0.072 }, uTime: { value: 0 },
+      uDisplace: { value: 0.048 }, uTime: { value: 0 },
       uParallax: { value: new THREE.Vector2() },
     });
 
