@@ -8,13 +8,12 @@
   <meta name="description" content="The personal website of Benjamin Ring." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      /* ── Buttermax palette ── */
-      --yellow: #FFD600;   /* color0 */
-      --black:  #101010;   /* color1 */
-      --gray:   #868686;   /* color2 */
+      --gold:  #E8CE7A;
+      --ivory: #F4F1EA;
+      --muted: rgba(244, 241, 234, 0.62);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,16 +21,13 @@
     html, body {
       width: 100%; height: 100%;
       overflow: hidden;
-      background: var(--black);
-      color: var(--yellow);
+      background: #14160f;
+      color: var(--ivory);
       cursor: none;
     }
 
-    #bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-    }
+    /* Photo + fluid smear are both drawn inside this canvas */
+    #bg { position: fixed; inset: 0; z-index: 0; }
 
     .stage {
       position: relative;
@@ -40,117 +36,115 @@
       height: 100vh;
       height: 100dvh;
       display: flex;
-      flex-direction: column;
-      padding: 2.25rem 3rem;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
       font-family: 'Inter', system-ui, sans-serif;
       -webkit-font-smoothing: antialiased;
       pointer-events: none;
     }
 
-    /* ── Header ── */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
+    /* ── Glass card ── */
+    .card {
+      position: relative;
+      max-width: 620px;
+      width: 100%;
+      padding: 3.6rem 4rem 3.9rem;
+      text-align: center;
+      background: rgba(18, 22, 16, 0.26);
+      backdrop-filter: blur(40px) saturate(1.5) brightness(1.04);
+      -webkit-backdrop-filter: blur(40px) saturate(1.5) brightness(1.04);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow:
+        0 40px 110px rgba(0, 0, 0, 0.5),
+        inset 0  1px 0 rgba(255, 255, 255, 0.12),
+        inset 0 -1px 0 rgba(0,   0,   0, 0.22);
       opacity: 0;
-      animation: fade-in 0.8s ease 0.2s forwards;
+      transform: translateY(24px);
+      animation: emerge 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards;
     }
 
-    .monogram {
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1rem;
+    .eyebrow {
+      font-size: 0.66rem;
       font-weight: 500;
-      letter-spacing: 0.22em;
-      color: var(--gray);
-    }
-
-    .nav {
-      display: flex;
-      gap: 0.4rem;
-      pointer-events: auto;
-    }
-
-    .nav a {
-      display: inline-block;
-      padding: 0.48rem 1.2rem;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.4em;
       text-transform: uppercase;
-      color: var(--yellow);
-      text-decoration: none;
-      background: rgba(16, 16, 16, 0.55);
-      border: 1px solid var(--yellow);
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition:
-        color        0.3s ease,
-        background   0.3s ease,
-        transform    0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .nav a:hover {
-      color: var(--black);
-      background: var(--yellow);
-      transform: translateY(-2px);
-    }
-
-    .nav a:focus-visible {
-      outline: 2px solid var(--yellow);
-      outline-offset: 3px;
-    }
-
-    /* ── Hero name ── */
-    .hero {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding-bottom: 0.25rem;
+      color: var(--gold);
+      margin-bottom: 1.4rem;
+      padding-left: 0.4em;
+      opacity: 0;
+      animation: fade-in 0.9s ease 0.7s forwards;
     }
 
     .name {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-weight: 500;
-      font-size: clamp(5rem, 15.5vw, 15rem);
-      line-height: 0.87;
-      letter-spacing: -0.02em;
-      color: var(--yellow);
-      /* Smear passing behind the letters flips them yellow <-> black */
-      mix-blend-mode: difference;
+      font-size: clamp(3.4rem, 9vw, 6.4rem);
+      /* room for the descenders on j / g */
+      line-height: 1.04;
+      padding-bottom: 0.12em;
+      letter-spacing: 0.005em;
+      color: var(--ivory);
+      text-shadow: 0 2px 40px rgba(0, 0, 0, 0.35);
       opacity: 0;
-      transform: translateY(50px);
-      animation: emerge 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+      transform: translateY(20px);
+      animation: rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+    }
+    .name .last { font-style: italic; font-weight: 400; }
+
+    .rule {
+      width: 56px; height: 1px;
+      background: var(--gold);
+      margin: 1.9rem auto 2.1rem;
+      transform: scaleX(0);
+      animation: grow 1s cubic-bezier(0.16, 1, 0.3, 1) 1.0s forwards;
     }
 
-    .name .last {
-      font-style: italic;
-      font-weight: 400;
-    }
-
-    /* ── Footer ── */
-    .footer {
-      padding-top: 1.5rem;
-      flex-shrink: 0;
+    /* ── Links (clearly highlighted pills) ── */
+    .links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      pointer-events: auto;
       opacity: 0;
-      animation: fade-in 0.9s ease 1.6s forwards;
+      animation: fade-in 0.9s ease 1.2s forwards;
     }
-
-    .eyebrow {
-      font-size: 0.62rem;
-      letter-spacing: 0.32em;
+    .links a {
+      display: inline-block;
+      padding: 0.7rem 1.6rem;
+      font-size: 0.73rem;
+      font-weight: 600;
+      letter-spacing: 0.13em;
       text-transform: uppercase;
-      color: var(--gray);
+      color: var(--ivory);
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      transition:
+        background   0.32s ease,
+        color        0.32s ease,
+        border-color 0.32s ease,
+        transform    0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .links a:hover {
+      background: var(--gold);
+      color: #1b1c14;
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+    .links a:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
 
     /* ── Cursor ── */
     .cursor {
       position: fixed;
       top: 0; left: 0;
-      width: 14px; height: 14px;
-      border: 1.5px solid var(--yellow);
+      width: 13px; height: 13px;
+      border: 1.5px solid var(--ivory);
       border-radius: 50%;
       pointer-events: none;
       z-index: 100;
@@ -158,23 +152,22 @@
       transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
       mix-blend-mode: difference;
     }
-    .cursor.big {
-      width: 46px; height: 46px;
-      background: rgba(255, 214, 0, 0.15);
-    }
+    .cursor.big { width: 44px; height: 44px; background: rgba(232, 206, 122, 0.18); }
 
-    @keyframes emerge { to { opacity: 1; transform: translateY(0); } }
+    @keyframes emerge  { to { opacity: 1; transform: translateY(0); } }
+    @keyframes rise    { to { opacity: 1; transform: translateY(0); } }
+    @keyframes grow    { to { transform: scaleX(1); } }
     @keyframes fade-in { to { opacity: 1; } }
 
     @media (max-width: 600px) {
-      .stage { padding: 1.5rem 1.5rem; }
-      .nav a { padding: 0.42rem 0.9rem; font-size: 0.67rem; }
+      .card { padding: 2.6rem 2rem 2.9rem; border-radius: 22px; }
       html, body { cursor: auto; }
       .cursor { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .name, .header, .footer { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .card, .eyebrow, .name, .links { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .rule { animation: none !important; transform: scaleX(1) !important; }
     }
   </style>
 </head>
@@ -184,25 +177,16 @@
   <div class="cursor" id="cursor"></div>
 
   <div class="stage">
-    <header class="header">
-      <span class="monogram">BR</span>
-      <nav class="nav" aria-label="Links">
+    <main class="card">
+      <p class="eyebrow">Personal Webpage</p>
+      <h1 class="name">Benjamin<br><span class="last">Ring</span></h1>
+      <div class="rule"></div>
+      <nav class="links" aria-label="Links">
         <a href="mailto:contact@benjaminring.de">Email</a>
         <a href="https://github.com/BenjaminRing" target="_blank" rel="noopener">GitHub</a>
         <a href="https://www.linkedin.com/in/b-ring/" target="_blank" rel="noopener">LinkedIn</a>
       </nav>
-    </header>
-
-    <main class="hero">
-      <h1 class="name">
-        Benjamin<br>
-        <span class="last">Ring</span>
-      </h1>
     </main>
-
-    <footer class="footer">
-      <p class="eyebrow">Personal Webpage</p>
-    </footer>
   </div>
 
   <script type="importmap">
@@ -216,288 +200,270 @@
   <script type="module">
     import * as THREE from 'three';
 
-    const YELLOW = new THREE.Color('#FFD600');
-
-    // ── Renderer ──────────────────────────────────────────────────────────
+    // ── Renderer (opaque — photo + smear composited in-shader) ──────────────
     const canvas = document.getElementById('bg');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     const DPR = Math.min(window.devicePixelRatio, 2);
     renderer.setPixelRatio(DPR);
     renderer.setSize(innerWidth, innerHeight);
-    renderer.setClearColor(0x101010, 1);
+    renderer.outputColorSpace = THREE.LinearSRGBColorSpace;  // raw passthrough
+    renderer.setClearColor(0x14160f, 1);
     renderer.autoClear = false;
 
-    // Fullscreen-quad camera reused by every 2D pass
-    const quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const quadGeo = new THREE.PlaneGeometry(2, 2);
+    const quadCam   = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const quadGeo   = new THREE.PlaneGeometry(2, 2);
+    const quad      = new THREE.Mesh(quadGeo);
+    const quadScene = new THREE.Scene();
+    quadScene.add(quad);
+    function blit(target, material){
+      quad.material = material;
+      renderer.setRenderTarget(target);
+      renderer.render(quadScene, quadCam);
+    }
 
-    // ─────────────────────────────────────────────────────────────────────
-    //  1. FLUID SMEAR — ping-pong feedback buffer that trails the cursor
-    // ─────────────────────────────────────────────────────────────────────
-    const SMEAR_SCALE = 0.5;                         // half-res for softness + speed
-    const smearOpts = {
-      type: THREE.HalfFloatType,
-      minFilter: THREE.LinearFilter,
-      magFilter: THREE.LinearFilter,
-      depthBuffer: false,
-      stencilBuffer: false,
+    /* ═══════════════════════════════════════════════════════════════════════
+       GPU FLUID SOLVER — the velocity field liquid-distorts the photo.
+       ═══════════════════════════════════════════════════════════════════════ */
+    const SIM = {
+      RESOLUTION: 200, VEL_DISSIPATION: 0.18,
+      PRESSURE: 0.8, PRESSURE_ITER: 20, CURL: 22,
+      SPLAT_RADIUS: 0.0032, SPLAT_FORCE: 7600,
     };
-    const rtSize = () => [
-      Math.max(2, Math.floor(innerWidth  * DPR * SMEAR_SCALE)),
-      Math.max(2, Math.floor(innerHeight * DPR * SMEAR_SCALE)),
-    ];
-    let [rw, rh] = rtSize();
-    let rtA = new THREE.WebGLRenderTarget(rw, rh, smearOpts);
-    let rtB = new THREE.WebGLRenderTarget(rw, rh, smearOpts);
 
-    const smearMat = new THREE.ShaderMaterial({
-      uniforms: {
-        uPrev:     { value: null },
-        uMouse:    { value: new THREE.Vector2(0.5, 0.5) },
-        uVel:      { value: new THREE.Vector2(0, 0) },
-        uAspect:   { value: innerWidth / innerHeight },
-        uTime:     { value: 0 },
-        uActive:   { value: 0 },
-      },
-      vertexShader: /* glsl */`
-        varying vec2 vUv;
-        void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
-      `,
-      fragmentShader: /* glsl */`
-        precision highp float;
-        uniform sampler2D uPrev;
-        uniform vec2  uMouse;
-        uniform vec2  uVel;
-        uniform float uAspect;
-        uniform float uTime;
-        uniform float uActive;
-        varying vec2  vUv;
+    function getRes(res){
+      let aspect = innerWidth / innerHeight;
+      if (aspect < 1) aspect = 1 / aspect;
+      const min = Math.round(res);
+      const max = Math.round(res * aspect);
+      return innerWidth > innerHeight ? { w: max, h: min } : { w: min, h: max };
+    }
+    const rtOpts = {
+      type: THREE.HalfFloatType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter,
+      wrapS: THREE.ClampToEdgeWrapping, wrapT: THREE.ClampToEdgeWrapping,
+      depthBuffer: false, stencilBuffer: false,
+    };
+    const makeRT = (w, h) => new THREE.WebGLRenderTarget(w, h, rtOpts);
+    function makeDouble(w, h){
+      return { read: makeRT(w, h), write: makeRT(w, h),
+        swap(){ const t = this.read; this.read = this.write; this.write = t; },
+        setSize(w, h){ this.read.setSize(w, h); this.write.setSize(w, h); } };
+    }
+    let res = getRes(SIM.RESOLUTION);
+    let velocity = makeDouble(res.w, res.h);
+    let pressure = makeDouble(res.w, res.h);
+    let divergence = makeRT(res.w, res.h);
+    let curl       = makeRT(res.w, res.h);
+    const texel = { value: new THREE.Vector2(1 / res.w, 1 / res.h) };
 
-        // Warm Buttermax-family glow: yellow -> amber -> warm white
-        vec3 palette(float t){
-          vec3 yellow = vec3(1.000, 0.839, 0.000);   // #FFD600
-          vec3 amber  = vec3(1.000, 0.520, 0.020);
-          vec3 warm   = vec3(1.000, 0.960, 0.820);
-          float a = sin(t * 0.70)        * 0.5 + 0.5;
-          float b = sin(t * 0.43 + 1.7)  * 0.5 + 0.5;
-          vec3 c = mix(yellow, amber, a);
-          c = mix(c, warm, b * 0.45);
-          return c;
-        }
-
-        void main(){
-          vec2 uv = vUv;
-
-          // Advect the field along cursor velocity → the smear "drags"
-          vec2 advect = uVel * 0.90;
-          vec3 prev = texture2D(uPrev, uv - advect).rgb;
-
-          // Slow dissipation so trails linger then fade
-          prev *= 0.972;
-
-          // Splat at the cursor, stronger + wider with faster movement
-          vec2 d = uv - uMouse;
-          d.x *= uAspect;
-          float dist = length(d);
-          float speed = length(uVel);
-          float radius = 0.11 + speed * 6.0;
-          float splat = smoothstep(radius, 0.0, dist);
-          splat *= (0.11 + speed * 22.0) * uActive;
-
-          vec3 ink = palette(uTime + dist * 6.0 + uMouse.x * 3.0);
-
-          vec3 outc = prev + ink * splat;
-          outc = min(outc, vec3(1.6));                // clamp runaway accumulation
-          gl_FragColor = vec4(outc, 1.0);
-        }
-      `,
+    const baseVert = /* glsl */`
+      varying vec2 vUv, vL, vR, vT, vB;
+      uniform vec2 texelSize;
+      void main(){
+        vUv = uv;
+        vL = uv - vec2(texelSize.x, 0.0); vR = uv + vec2(texelSize.x, 0.0);
+        vT = uv + vec2(0.0, texelSize.y); vB = uv - vec2(0.0, texelSize.y);
+        gl_Position = vec4(position.xy, 0.0, 1.0);
+      }
+    `;
+    const fluidMat = (frag, uniforms) => new THREE.ShaderMaterial({
+      vertexShader: baseVert, fragmentShader: frag,
+      uniforms: Object.assign({ texelSize: texel }, uniforms),
+      depthTest: false, depthWrite: false,
     });
-    const smearQuad  = new THREE.Mesh(quadGeo, smearMat);
-    const smearScene = new THREE.Scene();
-    smearScene.add(smearQuad);
 
-    // Clear both targets to black
-    function clearTargets(){
-      const clr = new THREE.MeshBasicMaterial({ color: 0x000000 });
-      const m = new THREE.Mesh(quadGeo, clr);
-      const s = new THREE.Scene(); s.add(m);
-      for (const rt of [rtA, rtB]) {
-        renderer.setRenderTarget(rt);
-        renderer.clear(true, true, true);
-        renderer.render(s, quadCam);
+    const advectMat = fluidMat(/* glsl */`
+      precision highp float; varying vec2 vUv;
+      uniform sampler2D uVelocity, uSource; uniform float dt, dissipation; uniform vec2 texelSize;
+      void main(){
+        vec2 coord = vUv - dt * texture2D(uVelocity, vUv).xy * texelSize;
+        gl_FragColor = texture2D(uSource, coord) / (1.0 + dissipation * dt);
+      }
+    `, { uVelocity: { value: null }, uSource: { value: null }, dt: { value: 0 }, dissipation: { value: 0 } });
+
+    const splatMat = fluidMat(/* glsl */`
+      precision highp float; varying vec2 vUv;
+      uniform sampler2D uTarget; uniform float aspectRatio, radius; uniform vec3 color; uniform vec2 point;
+      void main(){
+        vec2 p = vUv - point; p.x *= aspectRatio;
+        vec3 splat = exp(-dot(p, p) / radius) * color;
+        gl_FragColor = vec4(texture2D(uTarget, vUv).xyz + splat, 1.0);
+      }
+    `, { uTarget: { value: null }, aspectRatio: { value: 1 }, radius: { value: SIM.SPLAT_RADIUS },
+         color: { value: new THREE.Vector3() }, point: { value: new THREE.Vector2() } });
+
+    const divergenceMat = fluidMat(/* glsl */`
+      precision highp float; varying vec2 vUv, vL, vR, vT, vB; uniform sampler2D uVelocity;
+      void main(){
+        float L=texture2D(uVelocity,vL).x, R=texture2D(uVelocity,vR).x;
+        float T=texture2D(uVelocity,vT).y, B=texture2D(uVelocity,vB).y;
+        vec2 C=texture2D(uVelocity,vUv).xy;
+        if(vL.x<0.0)L=-C.x; if(vR.x>1.0)R=-C.x; if(vT.y>1.0)T=-C.y; if(vB.y<0.0)B=-C.y;
+        gl_FragColor=vec4(0.5*(R-L+T-B),0.0,0.0,1.0);
+      }
+    `, { uVelocity: { value: null } });
+
+    const curlMat = fluidMat(/* glsl */`
+      precision highp float; varying vec2 vUv, vL, vR, vT, vB; uniform sampler2D uVelocity;
+      void main(){
+        float L=texture2D(uVelocity,vL).y, R=texture2D(uVelocity,vR).y;
+        float T=texture2D(uVelocity,vT).x, B=texture2D(uVelocity,vB).x;
+        gl_FragColor=vec4(0.5*(R-L-T+B),0.0,0.0,1.0);
+      }
+    `, { uVelocity: { value: null } });
+
+    const vorticityMat = fluidMat(/* glsl */`
+      precision highp float; varying vec2 vUv, vL, vR, vT, vB;
+      uniform sampler2D uVelocity, uCurl; uniform float curlAmount, dt;
+      void main(){
+        float L=texture2D(uCurl,vL).x, R=texture2D(uCurl,vR).x;
+        float T=texture2D(uCurl,vT).x, B=texture2D(uCurl,vB).x, C=texture2D(uCurl,vUv).x;
+        vec2 force=0.5*vec2(abs(T)-abs(B),abs(R)-abs(L));
+        force/=length(force)+0.0001; force*=curlAmount*C; force.y*=-1.0;
+        vec2 vel=texture2D(uVelocity,vUv).xy; vel+=force*dt; vel=clamp(vel,-1000.0,1000.0);
+        gl_FragColor=vec4(vel,0.0,1.0);
+      }
+    `, { uVelocity: { value: null }, uCurl: { value: null }, curlAmount: { value: SIM.CURL }, dt: { value: 0 } });
+
+    const pressureMat = fluidMat(/* glsl */`
+      precision highp float; varying vec2 vUv, vL, vR, vT, vB; uniform sampler2D uPressure, uDivergence;
+      void main(){
+        float L=texture2D(uPressure,vL).x, R=texture2D(uPressure,vR).x;
+        float T=texture2D(uPressure,vT).x, B=texture2D(uPressure,vB).x;
+        float div=texture2D(uDivergence,vUv).x;
+        gl_FragColor=vec4((L+R+T+B-div)*0.25,0.0,0.0,1.0);
+      }
+    `, { uPressure: { value: null }, uDivergence: { value: null } });
+
+    const gradientMat = fluidMat(/* glsl */`
+      precision highp float; varying vec2 vUv, vL, vR, vT, vB; uniform sampler2D uPressure, uVelocity;
+      void main(){
+        float L=texture2D(uPressure,vL).x, R=texture2D(uPressure,vR).x;
+        float T=texture2D(uPressure,vT).x, B=texture2D(uPressure,vB).x;
+        vec2 vel=texture2D(uVelocity,vUv).xy; vel-=vec2(R-L,T-B);
+        gl_FragColor=vec4(vel,0.0,1.0);
+      }
+    `, { uPressure: { value: null }, uVelocity: { value: null } });
+
+    const clearMat = fluidMat(/* glsl */`
+      precision highp float; varying vec2 vUv; uniform sampler2D uTexture; uniform float value;
+      void main(){ gl_FragColor = value * texture2D(uTexture, vUv); }
+    `, { uTexture: { value: null }, value: { value: SIM.PRESSURE } });
+
+    /* ── Composite: nature photo, liquid-distorted by the velocity field ── */
+    const placeholder = new THREE.DataTexture(new Uint8Array([20, 22, 15, 255]), 1, 1);
+    placeholder.needsUpdate = true;
+
+    const displayMat = fluidMat(/* glsl */`
+      precision highp float;
+      varying vec2 vUv;
+      uniform sampler2D uTexA, uTexB, uVelocity;
+      uniform float uFade, uAspA, uAspB, uScreenAsp, uDisplace, uTime;
+      uniform vec2 uParallax, texelSize;
+
+      // background-size: cover mapping
+      vec2 coverUv(vec2 uv, float imgAsp){
+        vec2 c = uv;
+        if (uScreenAsp > imgAsp) c.y = (uv.y - 0.5) * (imgAsp / uScreenAsp) + 0.5;
+        else                     c.x = (uv.x - 0.5) * (uScreenAsp / imgAsp) + 0.5;
+        return c;
+      }
+      void main(){
+        // Liquid displacement from the fluid velocity field
+        vec2 vel = texture2D(uVelocity, vUv).xy;
+        vec2 disp = vel * texelSize * uDisplace;
+
+        // slight zoom leaves room for parallax; parallax follows the cursor
+        vec2 uv = (vUv - 0.5) / 1.06 + 0.5 + uParallax + disp;
+
+        vec3 a = texture2D(uTexA, coverUv(uv, uAspA)).rgb;
+        vec3 b = texture2D(uTexB, coverUv(uv, uAspB)).rgb;
+        vec3 col = mix(a, b, uFade);
+        col *= 0.82;                                   // gentle darken for contrast
+
+        // Vignette toward the edges keeps the card legible
+        float vig = smoothstep(0.95, 0.32, distance(vUv, vec2(0.5)));
+        col *= mix(0.5, 1.0, vig);
+
+        gl_FragColor = vec4(col, 1.0);
+      }
+    `, {
+      uTexA: { value: placeholder }, uTexB: { value: placeholder },
+      uVelocity: { value: null },
+      uFade: { value: 0 }, uAspA: { value: 1.5 }, uAspB: { value: 1.5 },
+      uScreenAsp: { value: innerWidth / innerHeight },
+      uDisplace: { value: 0.06 }, uTime: { value: 0 },
+      uParallax: { value: new THREE.Vector2() },
+    });
+
+    function clearFluid(){
+      renderer.setClearColor(0x000000, 0);
+      for (const rt of [velocity.read, velocity.write,
+                        pressure.read, pressure.write, divergence, curl]) {
+        renderer.setRenderTarget(rt); renderer.clear(true, false, false);
       }
       renderer.setRenderTarget(null);
-      clr.dispose();
+      renderer.setClearColor(0x14160f, 1);
     }
-    clearTargets();
+    clearFluid();
 
-    // ─────────────────────────────────────────────────────────────────────
-    //  2. DISPLAY PASS — draw the smear buffer to the screen
-    // ─────────────────────────────────────────────────────────────────────
-    const displayMat = new THREE.ShaderMaterial({
-      uniforms: { uTex: { value: null } },
-      depthTest: false,
-      depthWrite: false,
-      vertexShader: /* glsl */`
-        varying vec2 vUv;
-        void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }
-      `,
-      fragmentShader: /* glsl */`
-        precision highp float;
-        uniform sampler2D uTex;
-        varying vec2 vUv;
-        void main(){
-          vec3 smear = texture2D(uTex, vUv).rgb;
-          // Sits over the black canvas; a faint floor keeps it from being pure black
-          vec3 col = vec3(0.063) * (1.0 - min(1.0, length(smear))) + smear;
-          gl_FragColor = vec4(col, 1.0);
+    function splat(px, py, dx, dy){
+      const aspect = innerWidth / innerHeight;
+      splatMat.uniforms.aspectRatio.value = aspect;
+      splatMat.uniforms.point.value.set(px, py);
+      splatMat.uniforms.radius.value = SIM.SPLAT_RADIUS * (aspect > 1 ? aspect : 1);
+      splatMat.uniforms.uTarget.value = velocity.read.texture;
+      splatMat.uniforms.color.value.set(dx, dy, 0);
+      blit(velocity.write, splatMat); velocity.swap();
+    }
+
+    /* ── Nature slideshow textures ── */
+    const SLIDES = [
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=85', // mountain
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2400&q=85', // beach
+      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2400&q=85', // forest
+      'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=2400&q=85', // lake
+    ];
+    const textures = []; const aspects = [];
+    const loader = new THREE.TextureLoader();
+    loader.setCrossOrigin('anonymous');
+    let loaded = 0, cur = 0, nxt = 0, transitioning = false, fade = 0;
+    SLIDES.forEach((url, i) => {
+      loader.load(url, (tex) => {
+        tex.colorSpace = THREE.NoColorSpace;
+        tex.minFilter = THREE.LinearFilter;
+        tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+        textures[i] = tex;
+        aspects[i] = tex.image.width / tex.image.height;
+        loaded++;
+        if (i === 0) {
+          displayMat.uniforms.uTexA.value = tex;
+          displayMat.uniforms.uAspA.value = aspects[i];
         }
-      `,
+      });
     });
-    const displayQuad  = new THREE.Mesh(quadGeo, displayMat);
-    const displayScene = new THREE.Scene();
-    displayScene.add(displayQuad);
+    // advance every 7.5s
+    setInterval(() => {
+      if (transitioning || loaded < SLIDES.length) return;
+      nxt = (cur + 1) % SLIDES.length;
+      displayMat.uniforms.uTexB.value = textures[nxt];
+      displayMat.uniforms.uAspB.value = aspects[nxt];
+      transitioning = true;
+    }, 7500);
 
-    // ─────────────────────────────────────────────────────────────────────
-    //  3. THE OBJECT — organic sphere, tinted by the smear behind it
-    // ─────────────────────────────────────────────────────────────────────
-    const sphereScene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 100);
-    camera.position.z = 4.5;
-
-    const sphereMat = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime:       { value: 0 },
-        uMouse:      { value: new THREE.Vector2() },
-        uSmear:      { value: null },
-        uResolution: { value: new THREE.Vector2(innerWidth * DPR, innerHeight * DPR) },
-        uYellow:     { value: YELLOW },
-      },
-      vertexShader: /* glsl */`
-        uniform float uTime;
-        uniform vec2  uMouse;
-        varying vec3  vNormal;
-        varying vec3  vPos;
-
-        // Simplex 3-D noise — Ashima Arts (MIT)
-        vec3 mod289v3(vec3 x){return x-floor(x*(1./289.))*289.;}
-        vec4 mod289v4(vec4 x){return x-floor(x*(1./289.))*289.;}
-        vec4 permute(vec4 x){return mod289v4(((x*34.)+1.)*x);}
-        vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-.85373472095314*r;}
-        float snoise(vec3 v){
-          const vec2 C=vec2(1./6.,1./3.); const vec4 D=vec4(0.,.5,1.,2.);
-          vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
-          vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.-g;
-          vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
-          vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy;
-          i=mod289v3(i);
-          vec4 p=permute(permute(permute(
-            i.z+vec4(0.,i1.z,i2.z,1.))+i.y+vec4(0.,i1.y,i2.y,1.))
-            +i.x+vec4(0.,i1.x,i2.x,1.));
-          float n_=.142857142857; vec3 ns=n_*D.wyz-D.xzx;
-          vec4 j=p-49.*floor(p*ns.z*ns.z);
-          vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.*x_);
-          vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy;
-          vec4 h=1.-abs(x)-abs(y);
-          vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw);
-          vec4 s0=floor(b0)*2.+1.; vec4 s1=floor(b1)*2.+1.;
-          vec4 sh=-step(h,vec4(0.));
-          vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-          vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y);
-          vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
-          vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
-          p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
-          vec4 m=max(.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.); m=m*m;
-          return 42.*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-        }
-
-        void main(){
-          vNormal = normalize(normalMatrix * normal);
-          float t = uTime * 0.35;
-          float n  = snoise(position * 1.0 + vec3(t*.65, t*.40, t*.50));
-          float n2 = snoise(position * 2.1 - vec3(t*.45, t*.72, t*.30)) * 0.40;
-          float n3 = snoise(position * 4.2 + vec3(t*.28, t*.55, t*.82)) * 0.15;
-          float disp = (n + n2 + n3) * 0.22;
-          float md = dot(normalize(position.xy), uMouse);
-          disp += smoothstep(0.2, 1.0, md) * 0.14;
-          vPos = position + normal * disp;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(vPos, 1.0);
-        }
-      `,
-      fragmentShader: /* glsl */`
-        precision highp float;
-        uniform vec2      uResolution;
-        uniform sampler2D uSmear;
-        uniform vec3      uYellow;
-        varying vec3      vNormal;
-        varying vec3      vPos;
-
-        void main(){
-          vec3 n = normalize(vNormal);
-          vec3 view = normalize(cameraPosition - vPos);
-          float fres = pow(1.0 - clamp(dot(n, view), 0.0, 1.0), 2.6);
-
-          // Sample the smear buffer directly behind this pixel of the object
-          vec2 screenUv = gl_FragCoord.xy / uResolution;
-          vec3 smear = texture2D(uSmear, screenUv).rgb;
-
-          // Dark charcoal body that takes on the colour of the smear behind it
-          float lambert = dot(n, normalize(vec3(0.4, 0.8, 0.6))) * 0.5 + 0.5;
-          vec3 body = vec3(0.055) + vec3(0.075) * lambert;
-          body += smear * 0.85;                       // ← changes colour w/ smear behind it
-
-          // Yellow fresnel rim keeps it on-palette
-          vec3 col = body + uYellow * fres * 0.9;
-
-          gl_FragColor = vec4(col, 1.0);
-        }
-      `,
-    });
-
-    const sphere = new THREE.Mesh(new THREE.SphereGeometry(1.6, 128, 128), sphereMat);
-    sphereScene.add(sphere);
-
-    // Floating specks for depth
-    const N = 700;
-    const pts = new Float32Array(N * 3);
-    for (let i = 0; i < N; i++) {
-      pts[i*3]   = (Math.random() - 0.5) * 14;
-      pts[i*3+1] = (Math.random() - 0.5) * 9;
-      pts[i*3+2] = (Math.random() - 0.5) * 6 - 2;
+    /* ── Input ── */
+    const pointer = { x: 0.5, y: 0.5, dx: 0, dy: 0, moved: false };
+    let lastX = 0.5, lastY = 0.5;
+    const parTarget = new THREE.Vector2();
+    function onMove(px, py){
+      const x = px / innerWidth, y = 1.0 - py / innerHeight;
+      pointer.dx = x - lastX; pointer.dy = y - lastY;
+      pointer.x = x; pointer.y = y; pointer.moved = true;
+      lastX = x; lastY = y; tcx = px; tcy = py;
+      parTarget.set((px / innerWidth - 0.5) * -0.02, (py / innerHeight - 0.5) * 0.02);
     }
-    const pGeo = new THREE.BufferGeometry();
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
-    sphereScene.add(new THREE.Points(pGeo, new THREE.PointsMaterial({
-      color: 0xFFD600, size: 0.012, transparent: true, opacity: 0.22, sizeAttenuation: true,
-    })));
+    window.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    window.addEventListener('touchmove', e => onMove(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
 
-    function setSpherePos(){
-      sphere.position.x = innerWidth > 700 ? 0.9 : 0;
-      sphere.position.y = innerWidth > 700 ? -0.1 : -0.5;
-    }
-    setSpherePos();
-
-    // ─────────────────────────────────────────────────────────────────────
-    //  Input
-    // ─────────────────────────────────────────────────────────────────────
-    const mouse     = new THREE.Vector2(0.5, 0.5);  // normalized 0..1
-    const prevMouse = new THREE.Vector2(0.5, 0.5);
-    const vel       = new THREE.Vector2(0, 0);
-    let hasMoved = false;
-
-    const tiltTarget = new THREE.Vector2();
-    const tilt       = new THREE.Vector2();
-
-    function pointer(x, y){
-      mouse.set(x / innerWidth, 1.0 - y / innerHeight);
-      tiltTarget.set((x / innerWidth - 0.5) * 2, -(y / innerHeight - 0.5) * 2);
-      hasMoved = true;
-      tcx = x; tcy = y;
-    }
-    window.addEventListener('mousemove', e => pointer(e.clientX, e.clientY));
-    window.addEventListener('touchmove', e => pointer(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
-
-    // Custom cursor
     const cursorEl = document.getElementById('cursor');
     let cx = innerWidth / 2, cy = innerHeight / 2, tcx = cx, tcy = cy;
     document.querySelectorAll('a').forEach(a => {
@@ -505,67 +471,75 @@
       a.addEventListener('mouseleave', () => cursorEl.classList.remove('big'));
     });
 
-    // ─────────────────────────────────────────────────────────────────────
-    //  Resize
-    // ─────────────────────────────────────────────────────────────────────
     window.addEventListener('resize', () => {
-      camera.aspect = innerWidth / innerHeight;
-      camera.updateProjectionMatrix();
       renderer.setSize(innerWidth, innerHeight);
-      sphereMat.uniforms.uResolution.value.set(innerWidth * DPR, innerHeight * DPR);
-      smearMat.uniforms.uAspect.value = innerWidth / innerHeight;
-      [rw, rh] = rtSize();
-      rtA.setSize(rw, rh);
-      rtB.setSize(rw, rh);
-      clearTargets();
-      setSpherePos();
+      displayMat.uniforms.uScreenAsp.value = innerWidth / innerHeight;
+      res = getRes(SIM.RESOLUTION);
+      texel.value.set(1 / res.w, 1 / res.h);
+      velocity.setSize(res.w, res.h); pressure.setSize(res.w, res.h);
+      divergence.setSize(res.w, res.h); curl.setSize(res.w, res.h);
+      clearFluid();
     });
 
-    // ─────────────────────────────────────────────────────────────────────
-    //  Render loop
-    // ─────────────────────────────────────────────────────────────────────
-    const clock = new THREE.Clock();
+    /* ── Fluid step ── */
+    function step(dt){
+      curlMat.uniforms.uVelocity.value = velocity.read.texture; blit(curl, curlMat);
+      vorticityMat.uniforms.uVelocity.value = velocity.read.texture;
+      vorticityMat.uniforms.uCurl.value = curl.texture; vorticityMat.uniforms.dt.value = dt;
+      blit(velocity.write, vorticityMat); velocity.swap();
+      divergenceMat.uniforms.uVelocity.value = velocity.read.texture; blit(divergence, divergenceMat);
+      clearMat.uniforms.uTexture.value = pressure.read.texture; clearMat.uniforms.value.value = SIM.PRESSURE;
+      blit(pressure.write, clearMat); pressure.swap();
+      pressureMat.uniforms.uDivergence.value = divergence.texture;
+      for (let i = 0; i < SIM.PRESSURE_ITER; i++) {
+        pressureMat.uniforms.uPressure.value = pressure.read.texture;
+        blit(pressure.write, pressureMat); pressure.swap();
+      }
+      gradientMat.uniforms.uPressure.value = pressure.read.texture;
+      gradientMat.uniforms.uVelocity.value = velocity.read.texture;
+      blit(velocity.write, gradientMat); velocity.swap();
+      advectMat.uniforms.uVelocity.value = velocity.read.texture;
+      advectMat.uniforms.uSource.value   = velocity.read.texture;
+      advectMat.uniforms.dt.value = dt; advectMat.uniforms.dissipation.value = SIM.VEL_DISSIPATION;
+      blit(velocity.write, advectMat); velocity.swap();
+    }
 
+    const par = new THREE.Vector2();
+    let lastTime = performance.now();
+    const clock = new THREE.Clock();
     function frame(){
       requestAnimationFrame(frame);
-      const t = clock.getElapsedTime();
+      const now = performance.now();
+      let dt = (now - lastTime) / 1000; lastTime = now; dt = Math.min(dt, 0.0166);
 
-      // Mouse velocity (smoothed)
-      const vx = mouse.x - prevMouse.x;
-      const vy = mouse.y - prevMouse.y;
-      vel.x += (vx - vel.x) * 0.35;
-      vel.y += (vy - vel.y) * 0.35;
-      prevMouse.copy(mouse);
+      // slideshow crossfade
+      if (transitioning) {
+        fade += dt / 2.0;
+        if (fade >= 1.0) {
+          fade = 0; cur = nxt; transitioning = false;
+          displayMat.uniforms.uTexA.value = textures[cur];
+          displayMat.uniforms.uAspA.value = aspects[cur];
+        }
+        displayMat.uniforms.uFade.value = fade;
+      }
 
-      // 1. Smear update (rtA → rtB)
-      smearMat.uniforms.uPrev.value  = rtA.texture;
-      smearMat.uniforms.uMouse.value.copy(mouse);
-      smearMat.uniforms.uVel.value.copy(vel);
-      smearMat.uniforms.uTime.value  = t;
-      smearMat.uniforms.uActive.value = hasMoved ? 1.0 : 0.0;
-      renderer.setRenderTarget(rtB);
-      renderer.render(smearScene, quadCam);
-      const tmp = rtA; rtA = rtB; rtB = tmp;
+      if (pointer.moved) {
+        pointer.moved = false;
+        splat(pointer.x, pointer.y, pointer.dx * SIM.SPLAT_FORCE, pointer.dy * SIM.SPLAT_FORCE);
+      }
+      step(dt);
 
-      // 2. Draw smear to screen
+      par.lerp(parTarget, 0.05);
+      displayMat.uniforms.uParallax.value.copy(par);
+      displayMat.uniforms.uVelocity.value = velocity.read.texture;
+      displayMat.uniforms.uTime.value = clock.getElapsedTime();
+
       renderer.setRenderTarget(null);
       renderer.clear(true, true, true);
-      displayMat.uniforms.uTex.value = rtA.texture;
-      renderer.render(displayScene, quadCam);
+      quad.material = displayMat;
+      renderer.render(quadScene, quadCam);
 
-      // 3. Object on top, sampling the smear behind it
-      tilt.x += (tiltTarget.x - tilt.x) * 0.05;
-      tilt.y += (tiltTarget.y - tilt.y) * 0.05;
-      sphere.rotation.y = t * 0.07 + tilt.x * 0.42;
-      sphere.rotation.x = tilt.y * 0.28;
-      sphereMat.uniforms.uTime.value  = t;
-      sphereMat.uniforms.uMouse.value.copy(tilt);
-      sphereMat.uniforms.uSmear.value = rtA.texture;
-      renderer.render(sphereScene, camera);
-
-      // Cursor
-      cx += (tcx - cx) * 0.18;
-      cy += (tcy - cy) * 0.18;
+      cx += (tcx - cx) * 0.18; cy += (tcy - cy) * 0.18;
       cursorEl.style.transform = `translate(${cx}px, ${cy}px) translate(-50%, -50%)`;
     }
     frame();
